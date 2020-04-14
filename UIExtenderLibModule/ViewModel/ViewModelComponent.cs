@@ -108,6 +108,17 @@ namespace UIExtenderLibModule.ViewModel
         }
 
         /**
+         * Call `Destroy` on mixins for view model types.
+         */
+        internal void DestroyMixinsForTypes(IEnumerable<Type> types)
+        {
+            foreach (KeyValuePair<object, IViewModelMixin> pair in _mixinInstanceCache.Where(kv => types.Contains(kv.Key.GetType().BaseType)))
+            {
+                pair.Value.Destroy();
+            }
+        }
+
+        /**
          * Generate type in the shared _assemblyBuilder for view model type
          */
         private Type GenerateExtendedVMTypeFor(Type t)

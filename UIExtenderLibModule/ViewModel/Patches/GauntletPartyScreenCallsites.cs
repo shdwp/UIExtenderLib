@@ -45,4 +45,25 @@ namespace UIExtenderLibModule.ViewModel.Patches
             component.RefreshMixinsForTypes(new[] {typeof(PartyVM)});
         }
     }
+
+    // OnDeactivate - runs on party screen destroy
+    [HarmonyPatch]
+    public static class GauntletPartyScreenOnDeactivateCallsite
+    {
+        public static MethodBase TargetMethod()
+        {
+            Type type = typeof(GauntletPartyScreen);
+            MethodInfo interfaceMethod = type.GetInterface(nameof(IGameStateListener)).GetMethod("OnDeactivate");
+            if (interfaceMethod == null) return null;
+    
+            InterfaceMapping map = type.GetInterfaceMap(interfaceMethod.DeclaringType ?? throw new NullReferenceException("Cannot find GauntletPartyScreen IGameStateListener.OnDeactivate method"));
+            return map.TargetMethods[Array.IndexOf(map.InterfaceMethods, interfaceMethod)];
+        }
+    
+        public static void Prefix()
+        {
+            ViewModelComponent component = UIExtenderLibModule.SharedInstance.ViewModelComponent;
+            component.DestroyMixinsForTypes(new[] {typeof(PartyVM)});
+        }
+    }
 }
