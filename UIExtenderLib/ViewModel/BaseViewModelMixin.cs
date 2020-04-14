@@ -11,6 +11,7 @@ namespace UIExtenderLib.ViewModel
     public interface IViewModelMixin
     {
         void Refresh();
+        void Destroy();
     }
     
     /**
@@ -32,6 +33,11 @@ namespace UIExtenderLib.ViewModel
          * Called when view model is refreshed
          */
         public virtual void Refresh() { }
+        
+        /**
+         * Called when view model is destroyed
+         */
+        public virtual void Destroy() { }
 
         /**
          * Helper method to get private value from _vm
